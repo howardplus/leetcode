@@ -24,16 +24,8 @@ int removeDuplicates(int* nums, int numsSize)
     int r = 0, w = 0;
     int r1 = -1;
     while (r < numsSize) {
-        /* always advance first num */
-        if (r1 == -1) {
-            r1 = r;
-            r++;
-            w++;
-            count++;
-            continue;
-        }
 
-        while (r < numsSize && nums[r] == nums[r1])
+        while (r1 != -1 && r < numsSize && nums[r] == nums[r1])
             r++;
 
         if (r < numsSize) {
