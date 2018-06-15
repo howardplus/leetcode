@@ -6,52 +6,45 @@
  */
 #include <iostream>
 #include <string>
-#include <unordered_map>
-#include <bits/stdc++.h>
-#include <queue>
+#include <array>
+#include <algorithm>
+#include <sstream>
 
 using namespace std;
 
-struct CCount {
+/*
+ * 1. Put each character into array of its slot
+ * 2. Sort the array
+ * 3. Retrieve each character, and append into a new string.
+ */
+struct CharCount {
     char c;
     int count;
-    CCount(): c('\0'), count(0) {}
-    CCount(char c): c(c), count(1) {}
-};
-
-struct CCountComp {
-    bool operator() (CCount& l, CCount& r) {
-        return l.count < r.count;
-    }
+    CharCount(): c(0), count(0) {}
+    CharCount(char x, int y): c(x), count(y) {}
 };
 
 class Solution {
 public:
     string frequencySort(string s) {
-        
-        unordered_map<char, CCount> m;
+        array<CharCount, 256> characters;
 
-        for (auto i=0; i<s.length(); i++) {
-            char c = s[i];
-            if (m.find(c) == end(m))
-                m.insert(make_pair(c, CCount{c}));
-            else
-                m[c].count++;
+        for (auto c : s) {
+            characters[c].c = c;
+            characters[c].count++;
         }
 
-        priority_queue<CCount, vector<CCount>, CCountComp> pq; 
-        
-        for (auto e: m) {
-            pq.push(e.second);
-        }
+        sort(begin(characters), end(characters),
+                [](const CharCount& l, const CharCount& r) -> bool {
+                    return l.count > r.count; 
+                });
 
         stringstream ss;
-        while (!pq.empty()) {
-            for (auto i=0; i<pq.top().count; i++)
-                ss << pq.top().c;
-            pq.pop();
+        for (auto cc : characters) {
+            for (auto i=0; i<cc.count; i++) {
+                ss << cc.c;
+            }
         }
-
         return ss.str();
     }
 };

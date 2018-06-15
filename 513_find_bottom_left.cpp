@@ -17,39 +17,44 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+/*
+ * To find the bottom left, we use the following strategy:
+ * 1. Keep track of the max depth, record the val of leaf node
+ *    when current depth is >= max depth.
+ * 2. For same depth, left wins. So traverse to the right before
+ *    left arm.
+ *
+ * if root is null, return 0
+ */
 class Solution {
-    int maxDepth;
-    int bottomLeftVal; 
-
 public:
-    void traverse(TreeNode *n, int depth)
-    {
-        if (n->left == nullptr && n->right == nullptr) {
-            if (depth >= maxDepth) {
-                maxDepth = depth;
-                bottomLeftVal = n->val;
-            }
+    void traverse(TreeNode *n, int depth, int& val, int& maxDepth) {
+        if (!n->left && !n->right) {
+            maxDepth = max(maxDepth, depth);
+            if (depth >= maxDepth)
+                val = n->val;
             return;
         }
 
-        if (n->right) {
-            traverse(n->right, depth+1);
-        }
-        if (n->left) {
-            traverse(n->left, depth+1);
-        }
+        if (n->right)
+            traverse(n->right, depth+1, val, maxDepth);
+
+        if (n->left)
+            traverse(n->left, depth+1, val, maxDepth);
     }
 
-    int findBottomLeftValue(TreeNode* root)
-    {
-        maxDepth = 0;
-        traverse(root, 1);
-        return bottomLeftVal;
+    int findBottomLeftValue(TreeNode* root) {
+        if (!root)
+            return 0;
+
+        int maxDepth = 0;
+        int val;
+        traverse(root, 0, val, maxDepth);
+        return val;
     }
 };
 
-int main()
-{
+int main() {
     Solution s;
 
     TreeNode *r1 = new TreeNode(2);

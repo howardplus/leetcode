@@ -8,40 +8,30 @@
  */
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
-class Solution {
+class Solution { 
 public:
     vector<int> maxSlidingWindow(const vector<int>& nums, int k) {
-        vector<int> v{};
+        vector<int> result;
+        deque<int> d;
 
-        if (nums.size() == 0 || nums.size() < k)
-            return v;
-
-        int max_so_far = nums[0];
-        int max_index = 0;
         for (auto i=0; i<nums.size(); i++) {
-            if (max_index < (i-k+1)) {
-                max_so_far = nums[i-k+1]; 
-                max_index = i-k+1;
-                for (auto j=i-k+2; j<=i; j++) {
-                    if (nums[j] > max_so_far) {
-                        max_index = j;
-                        max_so_far = nums[j];
-                    } 
-                }
-            } else {
-                if (nums[i] > max_so_far) {
-                    max_index = i;
-                    max_so_far = nums[i];
-                }
-            }
+            if (!d.empty() && d.front() <= i-k)
+                d.pop_front();
 
-            if (i >= (k-1))
-                v.push_back(max_so_far); 
+            while (!d.empty() && nums[i] > nums[d.back()])
+                d.pop_back();
+
+            d.push_back(i);
+
+            if (i >= k-1)
+                result.push_back(nums[d.front()]);
         }
-        return v;
+
+        return result;
     }
 };
 
@@ -64,7 +54,7 @@ int main()
         cout << i << endl;
     cout << endl;
 
-    auto t3 = s.maxSlidingWindow(vector<int>{1,3,2}, 3);
+    auto t3 = s.maxSlidingWindow(vector<int>{1,-1}, 1);
     for (auto i: t3)
         cout << i << endl;
     cout << endl;

@@ -17,8 +17,30 @@ using namespace std;
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
-        auto tbl = vector<vector<int>>{nums.size(), vector<int>{nums.size(), 1}};
-        
+        auto left = vector<int>(nums.size(), 0);
+        auto right = vector<int>(nums.size(), 0);
+        auto result = vector<int>(nums.size(), 0);
+
+        if (nums.size() == 0)
+            return result;
+
+        int p = 1;
+        for (auto i=0; i<nums.size(); i++) {
+            left[i] = p;
+            p *= nums[i]; 
+        }
+
+        p = 1;
+        for (auto j=0; j<nums.size(); j++) {
+            right[nums.size()-j-1] = p;
+            p *= nums[nums.size()-j-1];
+        }
+       
+        for (auto i=0; i<nums.size(); i++) {
+            result[i] = left[i] * right[i];
+        }
+
+        return result;
     }
 };
 

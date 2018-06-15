@@ -10,64 +10,41 @@
 
 using namespace std;
 
+/*
+ * 1. With a row vector, set the vector value to true
+ *    if there is a 0 anywhere in that row.
+ * 2. Do the same with a col vector.
+ * 3. Then set row/col to 0 if row/col vector has value true.
+ */
 class Solution {
 public:
     void setZeroes(vector<vector<int>>& matrix)
     {
-        bool first_row = false, first_col = false;
+        auto rows = vector<bool>(matrix.size(), false);
+        auto cols = vector<bool>(matrix[0].size(), false);
 
-        for (auto e : matrix ) {
-            if (e[0] == 0) {
-                first_col = true;
-                break;
-            }
-        }
-
-        for (auto e : matrix[0]) {
-            if (e == 0) {
-                first_row = true;
-                break;
-            }
-        }
-
-        for (auto i = 1; i < matrix.size(); i++) {
-            for (auto j = 1; j < matrix[0].size(); j++) {
-                if (matrix[i][j] == 0) {
-                    matrix[0][j] = 0;
-                    matrix[i][0] = 0;
-                }
-            }
-        }
-
-        // use first row and col to set zeroes
-        for (auto i = 1; i<matrix.size(); i++) {
-            if (matrix[i][0] == 0) {
-                cout << "set row " << i << endl;
-                for (auto c=1; c<matrix[0].size(); c++) {
-                    matrix[i][c] = 0;
-                }
-            }
-        }
-
-        for (auto j = 1; j<matrix[0].size(); j++) {
-            if (matrix[0][j] == 0) {
-                cout << "set col " << j << endl;
-                for (auto r=1; r<matrix.size(); r++) {
-                    matrix[r][j] = 0;
-                }
-            }
-        }
-
-        // finally, get first row and col
-        if (first_row) {
+        for (auto r=0; r<matrix.size(); r++) {
             for (auto c=0; c<matrix[0].size(); c++) {
-                matrix[0][c] = 0;
+                if (matrix[r][c] == 0) {
+                    rows[r] = true;
+                    cols[c] = true;
+                }
             }
         }
 
-        if (first_col) {
-            for (auto r=0; r<matrix.size(); r++) {
-                matrix[r][0] = 0;
+        for (auto r=0; r<rows.size(); r++) {
+            if (rows[r]) {
+                for (auto c=0; c<matrix[0].size(); c++) {
+                    matrix[r][c] = 0;
+                }
+            }
+        }
+
+        for (auto c=0; c<cols.size(); c++) {
+            if (cols[c]) {
+                for (auto r=0; r<matrix.size(); r++) {
+                    matrix[r][c] = 0;
+                }
             }
         }
     }
