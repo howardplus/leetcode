@@ -16,23 +16,21 @@ struct ListNode {
 class Solution {
 public:
     ListNode* removeElements(ListNode* head, int val) {
-        ListNode *next, *prev = nullptr;
-        ListNode *n = head;
+
+        ListNode *prev = nullptr, *n = head;
+
         while (n) {
-            next = n->next;
             if (n->val == val) {
-
                 if (prev)
-                    prev->next = next;
+                    prev->next = n->next;
                 else
-                    head = next;
-
-                delete n;
+                    head = n->next;
             } else {
                 prev = n;
             }
-            n = next;
+            n = n->next;
         }
+
         return head;
     }
 };

@@ -14,24 +14,29 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
     public:
         int removeElement(vector<int>& nums, int val) {
-            if (nums.size() == 0)
-                return 0;
+            int j = nums.size()-1;
+            while (j>= 0 && nums[j] == val)
+                j--;
 
-            auto w = 0;
-            for (auto r=0; r<nums.size(); r++) {
-                if (nums[r] == val)
-                    continue;
-                nums[w] = nums[r];
-                w++;
+            int i = 0;
+            while (i <= j) {
+                if (nums[i] == val) {
+                    swap(nums[i], nums[j--]);
+                    while (j >= i && nums[j] == val)
+                        j--;
+                }
+
+                i++;
             }
 
-            return w;
+            return j+1;
         }
 };
 
@@ -51,14 +56,14 @@ int main()
         cout << t2[i] << " ";
     cout << endl;
 
-    auto t3 = vector<int>{};
-    auto n3 = s.removeElement(t3, 3);
+    auto t3 = vector<int>{0,4,4,0,4,4,4,0,2};
+    auto n3 = s.removeElement(t3, 4);
     for (auto i=0; i<n3; i++)
         cout << t3[i] << " ";
     cout << endl;
 
-    auto t4 = vector<int>{1,2,3,3,3};
-    auto n4 = s.removeElement(t4, 3);
+    auto t4 = vector<int>{2,2,3};
+    auto n4 = s.removeElement(t4, 2);
     for (auto i=0; i<n4; i++)
         cout << t4[i] << " ";
     cout << endl;

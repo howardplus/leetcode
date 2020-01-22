@@ -13,15 +13,19 @@ using namespace std;
 class Solution {
 public:
     bool isToeplitzMatrix(const vector<vector<int>>& matrix) {
-        if (matrix.size() <= 1 || matrix[0].size() <= 1)
+        // single row or column always return true
+        if (matrix.size() == 1 || matrix[0].size() == 1)
             return true;
 
-        for (auto i=1; i<matrix.size(); i++) {
-            for (auto j=1; j<matrix[0].size(); j++) {
-                if (matrix[i][j] != matrix[i-1][j-1])
+        // > 2 rows && 2 cols, go through and check upper-left
+        for (auto r=1; r<matrix.size(); r++) {
+            for (auto c=1; c<matrix[0].size(); c++) {
+                if (matrix[r][c] != matrix[r-1][c-1])
                     return false;
             }
         }
+
+        // no mismatch, it's good
         return true;
     }
 };

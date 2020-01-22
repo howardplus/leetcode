@@ -29,42 +29,48 @@ class Solution {
 public:
     ListNode* partition(ListNode* head, int x)
     {
-        ListNode *d1 = nullptr, *dummy = nullptr;
+        if (!head)
+            return head;
 
-        ListNode *n = head, *prev = nullptr;
-        ListNode *output = nullptr;
+        ListNode *h1 = nullptr, *t1 = nullptr, *h2;
 
+        if (head->val < x)
+            h1 = head;
+
+        h2 = head;
+        while (h2) {
+            if (h2->val >= x)
+                break;
+            t1 = h2;
+            h2 = h2->next;
+        }
+
+        ListNode *n = h2, *prev = nullptr;
         while (n) {
-            ListNode *next = n->next;
-            if (n->val >= x) {
+            auto next = n->next;
+            if (n->val < x) {
                 if (prev)
                     prev->next = n->next;
 
-                // put in dummy list
+                /* append n to t1 */
                 n->next = nullptr;
-                if (d1 != nullptr)
-                    d1->next = n;
+                if (t1)
+                    t1->next = n;
                 else
-                    dummy = n;
-                d1 = n;
+                    h1 = n;
+
+                t1 = n;
             } else {
                 prev = n;
-                if (output == nullptr)
-                    output = n;
             }
 
             n = next;
         }
 
-        if (dummy != nullptr) {
-            if (output == nullptr)
-                output = dummy;
-            else 
-                if (prev)
-                    prev->next = dummy;
-        }
+        if (t1)
+            t1->next = h2;
 
-        return output;
+        return h1 ? h1 : h2;
     }
 
     static void print(ListNode* head)

@@ -16,31 +16,34 @@ using namespace std;
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        vector<int> result;
-        unordered_map<int, int> m;
-        for (auto i=0; i<nums.size(); i++) {
-            int v = target-nums[i];
+        auto m = unordered_map<int, int>{};
 
-            if (m.find(v) != end(m)) {
-                result.push_back(m[v]);
-                result.push_back(i);
-                return result;
+        for (int i=0; i<int{nums.size()}; i++) {
+            int need = target - nums[i];
+            if (m.find(need) != end(m)) {
+                return {i, m[need]};
             }
-
             m[nums[i]] = i;
         }
-        return result;
+
+        // not reached
+        return {};
     }
 };
 
 int main() {
     Solution s;
 
-    vector<int> v1 = {3,2,4};
+    auto v1 = vector<int>{3, 2, 4};
     auto r1 = s.twoSum(v1, 6);
     for (auto i : r1) {
         cout << i << endl;
     }
 
+    auto v2 = vector<int>{2, 7, 11, 15};
+    auto r2 = s.twoSum(v2, 9);
+    for (auto i : r2) {
+        cout << i << endl;
+    }
     return 0;
 }
